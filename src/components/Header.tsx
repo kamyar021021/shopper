@@ -21,11 +21,8 @@ import {
 import { 
   Menu, 
   Close,
-  Brightness4, 
-  Brightness7,
   ShoppingCart
 } from '@mui/icons-material';
-import { useThemeContext } from '@/providers/ThemeProvider';
 import { useState } from 'react';
 
 interface HeaderProps {
@@ -47,7 +44,6 @@ function HideOnScroll({ children }: HideOnScrollProps) {
 }
 
 const Header = ({ onCartClick }: HeaderProps) => {
-  const { toggleTheme, mode } = useThemeContext();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -104,20 +100,12 @@ const Header = ({ onCartClick }: HeaderProps) => {
                   <IconButton color="inherit" onClick={onCartClick} sx={{ ml: 1 }}>
                     <ShoppingCart />
                   </IconButton>
-                  
-                  {/* <IconButton color="inherit" onClick={toggleTheme} sx={{ ml: 1 }}>
-                    {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
-                  </IconButton> */}
                 </Box>
               ) : (
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <IconButton color="inherit" onClick={onCartClick} sx={{ ml: 1 }}>
                     <ShoppingCart />
                   </IconButton>
-                  
-                  {/* <IconButton color="inherit" onClick={toggleTheme} sx={{ ml: 1 }}>
-                    {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
-                  </IconButton> */}
                   
                   <IconButton 
                     edge="start" 
@@ -157,7 +145,7 @@ const Header = ({ onCartClick }: HeaderProps) => {
         </Box>
         <List>
           {menuItems.map((item) => (
-            <ListItem  
+            <ListItem 
               key={item.text} 
               component="a" 
               href={item.href}

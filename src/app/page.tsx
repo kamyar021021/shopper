@@ -3,7 +3,6 @@
 
 import { useState, useEffect } from 'react';
 import {
-  Container,
   CssBaseline,
   Fab,
   useScrollTrigger,
@@ -13,14 +12,22 @@ import {
 import { KeyboardArrowUp } from '@mui/icons-material';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
-import Features from '../components/Features';
-import Products from '../components/Products';
-import Testimonials from '../components/Testimonials';
-import Pricing from '../components/Pricing';
-import Contact from '../components/Contact';
+import Features from '@/components/Features';
+import Products from '@/components/Products';
+import Testimonials from '@/components/Testimonials';
+import Pricing from '@/components/Pricing';
+import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import ShoppingCart from '@/components/ShoppingCart';
 import MuiThemeProvider from '@/providers/ThemeProvider';
+
+interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+}
 
 function ScrollTop() {
   const trigger = useScrollTrigger({
@@ -48,7 +55,7 @@ function ScrollTop() {
 
 export default function HomePage() {
   const [cartOpen, setCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {

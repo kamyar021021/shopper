@@ -3,7 +3,6 @@
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
-import { faIR } from '@mui/material/locale';
 
 type ThemeMode = 'light' | 'dark';
 
