@@ -1,95 +1,116 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+// src/app/page.tsx
+'use client';
 
-export default function Home() {
+import { useState, useEffect } from 'react';
+import {
+  Container,
+  CssBaseline,
+  Fab,
+  useScrollTrigger,
+  Zoom,
+  Box,
+} from '@mui/material';
+import { KeyboardArrowUp } from '@mui/icons-material';
+import Header from '@/components/Header';
+import Hero from '@/components/Hero';
+import Features from '../components/Features';
+import Products from '../components/Products';
+import Testimonials from '../components/Testimonials';
+import Pricing from '../components/Pricing';
+import Contact from '../components/Contact';
+import Footer from '@/components/Footer';
+import ShoppingCart from '@/components/ShoppingCart';
+import MuiThemeProvider from '@/providers/ThemeProvider';
+
+function ScrollTop() {
+  const trigger = useScrollTrigger({
+    threshold: 100,
+  });
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <Zoom in={trigger}>
+      <Box
+        onClick={scrollToTop}
+        role="presentation"
+        sx={{ position: 'fixed', bottom: 24, left: 24, zIndex: 1000 }}
+      >
+        <Fab color="primary" size="medium" aria-label="scroll back to top">
+          <KeyboardArrowUp />
+        </Fab>
+      </Box>
+    </Zoom>
+  );
+}
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
+export default function HomePage() {
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const savedCart = localStorage.getItem('luxe-cart');
+    if (savedCart) {
+      setCartItems(JSON.parse(savedCart));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      localStorage.setItem('luxe-cart', JSON.stringify(cartItems));
+    }
+  }, [cartItems, mounted]);
+
+  if (!mounted) return null;
+
+  return (
+    <MuiThemeProvider>
+      <CssBaseline />
+      <Header onCartClick={() => setCartOpen(true)} />
+      
+      <main>
+        <section id="home">
+          <Hero />
+        </section>
+        
+        <section id="features">
+          <Features />
+        </section>
+        
+        <section id="products">
+          <Products onAddToCart={(product) => setCartItems(prev => [...prev, {...product, quantity: 1}])} />
+        </section>
+        
+        <section id="testimonials">
+          <Testimonials />
+        </section>
+        
+        <section id="pricing">
+          <Pricing />
+        </section>
+        
+        <section id="contact">
+          <Contact />
+        </section>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+      <Footer />
+      
+      <ShoppingCart
+        open={cartOpen}
+        onClose={() => setCartOpen(false)}
+        cartItems={cartItems}
+        onUpdateQuantity={(id, qty) => setCartItems(prev => 
+          prev.map(item => item.id === id ? {...item, quantity: qty} : item)
+        )}
+        onRemoveItem={(id) => setCartItems(prev => prev.filter(item => item.id !== id))}
+      />
+
+      <ScrollTop />
+    </MuiThemeProvider>
   );
 }
