@@ -1,25 +1,14 @@
-// src/app/layout.tsx
-import type { Metadata } from 'next';
-import { Roboto, Poppins } from 'next/font/google';
-import './globals.css';
+import "./globals.css";
+import DarkThemeProvider from "../components/DarkThemeProvider";
 
-const roboto = Roboto({
-  weight: ['300', '400', '500', '700'],
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-roboto',
-});
-
-const poppins = Poppins({
-  weight: ['300', '400', '500', '600', '700'],
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-poppins',
-});
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'LuxeShop - فروشگاه لوکس آنلاین',
-  description: 'تجربه‌ای لوکس از خرید آنلاین با بهترین محصولات',
+  title: " EcoSilver",
+  description: "",
+  icons: {
+    icon: '../../Artboard 12.jpg'
+  }
 };
 
 export default function RootLayout({
@@ -28,9 +17,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fa" dir="rtl" className={`${roboto.variable} ${poppins.variable}`}>
+    <html lang="fa">
       <body>
-        {children}
+        <DarkThemeProvider>{children}</DarkThemeProvider>
       </body>
     </html>
   );
